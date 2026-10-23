@@ -9,6 +9,7 @@ import { CAPS, CHAT_MODEL, MAX_ANSWER_TOKENS } from '../lib/caps.js';
 import { clientIp, corsHeaders, json, preflight, visitorId } from '../lib/http.js';
 import { refund, reserve } from '../lib/limits.js';
 import { SYSTEM_PROMPT } from '../lib/persona.js';
+import { adapt } from '../lib/node-adapter.js';
 import { getStore, storeIsDurable } from '../lib/store.js';
 
 export const config = { supportsResponseStreaming: true };
@@ -19,7 +20,7 @@ const CAP_MESSAGE: Record<'visitor' | 'ip' | 'site', string> = {
   site: "The site's question budget is spent for today. The text-me prompt in the corner reaches Levi directly.",
 };
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   if (request.method === 'OPTIONS') return preflight(request);
   if (request.method !== 'POST') return json(request, { error: 'method' }, 405);
 
@@ -96,3 +97,5 @@ export default async function handler(request: Request): Promise<Response> {
     },
   });
 }
+
+export default adapt(handler);

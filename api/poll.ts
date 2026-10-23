@@ -5,6 +5,7 @@
 // Options are fixed here; the correct answer lives in the site copy, not here.
 
 import { json, preflight, visitorId } from '../lib/http.js';
+import { adapt } from '../lib/node-adapter.js';
 import { getStore } from '../lib/store.js';
 
 export const POLL_OPTIONS = [6, 13, 21] as const;
@@ -28,7 +29,7 @@ async function tally() {
   };
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   if (request.method === 'OPTIONS') return preflight(request);
 
   if (request.method === 'GET') {
@@ -55,3 +56,5 @@ export default async function handler(request: Request): Promise<Response> {
 
   return json(request, { ...(await tally()), voted: value }, 200, { 'cache-control': 'no-store' });
 }
+
+export default adapt(handler);
