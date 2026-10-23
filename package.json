@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Server functions for levibahn.com 3.0: Claude Q&A with spend caps, and the notification-screen poll. Deployed as its own Vercel project with root directory `server/`.",
-  "engines": { "node": ">=22" },
+  "engines": { "node": "22.x" },
   "scripts": {
     "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
