@@ -1,0 +1,22 @@
+# workspace.manifest.yaml — minimal manifest (project block only), per ADR-073.
+# This repo is a satellite of portfolio-site: its decisions, stages and gates live there.
+
+schema_version: 1
+studio: "The Shokunin Crafthouse"
+template_version: "1.3.0"
+
+surface: "web"
+
+visibility: "public"
+visibility_reason: "Vercel's free plan deploys only public org repos; this code holds no secrets or gated content (2026-10-22)."
+
+project:
+  name: "levibahn-api"
+  client: "Internal — Levi Bahn"
+  kind: "site"
+  stage: "03-build"
+  lead: "Levi Bahn"
+  started: "2026-10-22"
+  status: "active"
+  parent: "portfolio-site"
+  decisions: "../portfolio-site/decisions/decisions.md"

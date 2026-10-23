@@ -1,0 +1,21 @@
+{
+  "name": "levibahn-api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Server functions for levibahn.com 3.0: Claude Q&A with spend caps, and the notification-screen poll. Deployed as its own Vercel project with root directory `server/`.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.60.0",
+    "@upstash/redis": "^1.34.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "tsx": "^4.19.0"
+  }
+}
