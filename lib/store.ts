@@ -14,11 +14,16 @@ export interface CounterStore {
   get(key: string): Promise<number>;
   /** Add `member` to set `key`; true if it was new. */
   sadd(key: string, member: string): Promise<boolean>;
+  /** Set hash `key` field `field` only if absent; true if it was set. */
+  hsetnx(key: string, field: string, value: string): Promise<boolean>;
+  /** Read hash `key` field `field`, null when absent. */
+  hget(key: string, field: string): Promise<string | null>;
 }
 
 class MemoryStore implements CounterStore {
   private n = new Map<string, number>();
   private sets = new Map<string, Set<string>>();
+  private hashes = new Map<string, Map<string, string>>();
   async incr(key: string) {
     const v = (this.n.get(key) ?? 0) + 1;
     this.n.set(key, v);
@@ -39,6 +44,16 @@ class MemoryStore implements CounterStore {
     this.sets.set(key, s);
     return fresh;
   }
+  async hsetnx(key: string, field: string, value: string) {
+    const h = this.hashes.get(key) ?? new Map<string, string>();
+    if (h.has(field)) return false;
+    h.set(field, value);
+    this.hashes.set(key, h);
+    return true;
+  }
+  async hget(key: string, field: string) {
+    return this.hashes.get(key)?.get(field) ?? null;
+  }
 }
 
 class RedisStore implements CounterStore {
@@ -57,6 +72,13 @@ class RedisStore implements CounterStore {
   }
   async sadd(key: string, member: string) {
     return (await this.r.sadd(key, member)) === 1;
+  }
+  async hsetnx(key: string, field: string, value: string) {
+    return (await this.r.hsetnx(key, field, value)) === 1;
+  }
+  async hget(key: string, field: string) {
+    const v = await this.r.hget<string | number>(key, field);
+    return v === null || v === undefined ? null : String(v);
   }
 }
 
