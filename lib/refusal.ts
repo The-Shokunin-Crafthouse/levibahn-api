@@ -6,7 +6,7 @@
 export const OFF_TOPIC = 'OFF_TOPIC';
 
 /** What the visitor sees instead. The portfolio-site client matches it exactly. */
-export const REFUSAL_LINE = "Smartypants only knows about Levi's design expertise. Have something on topic to ask?";
+export const REFUSAL_LINE = "SmartyPants only knows about Levi's design expertise. Have something on topic to ask?";
 
 /**
  * Holds the start of a stream while it could still be the sentinel. Once the

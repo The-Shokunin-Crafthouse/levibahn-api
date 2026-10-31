@@ -48,7 +48,7 @@ test('over-cap messages point to "the link below", never the corner prompt', () 
 });
 
 test('burst body is the exact JSON the client matches', () => {
-  assert.deepEqual(BURST_BODY, { reason: 'burst', message: 'Smartypants needs a moment. Try again in a minute.' });
+  assert.deepEqual(BURST_BODY, { reason: 'burst', message: 'SmartyPants needs a moment. Try again in a minute.' });
 });
 
 test('a normal question streams and spends one', async () => {

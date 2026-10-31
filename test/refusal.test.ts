@@ -4,7 +4,7 @@ import { OFF_TOPIC, REFUSAL_LINE, RefusalGate, visibleAnswer } from '../lib/refu
 
 test('the canned line is the exact string the client matches (Levi, 2026-10-31)', () => {
   assert.equal(OFF_TOPIC, 'OFF_TOPIC');
-  assert.equal(REFUSAL_LINE, "Smartypants only knows about Levi's design expertise. Have something on topic to ask?");
+  assert.equal(REFUSAL_LINE, "SmartyPants only knows about Levi's design expertise. Have something on topic to ask?");
 });
 
 test('the sentinel, split across deltas, becomes the canned line and closes the gate', () => {
