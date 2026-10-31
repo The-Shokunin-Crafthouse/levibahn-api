@@ -46,6 +46,15 @@ export async function reserve(
   return { ok: true, remainingForVisitor: CAPS.perVisitorPerDay - v };
 }
 
+/** Questions one IP may start per minute. Not a daily cap: office networks share an IP (spec 60 §6, §10). */
+export const BURST_PER_IP_PER_MINUTE = 3;
+
+/** True when this IP may ask now. Every attempt counts, so a script hammering the endpoint stays shut out. */
+export async function burst(store: CounterStore, ip: string, now = new Date()): Promise<boolean> {
+  const minute = now.toISOString().slice(0, 16);
+  return (await store.incr(`chat:burst:${minute}:${ip}`, 60)) <= BURST_PER_IP_PER_MINUTE;
+}
+
 /** Give the question back when the model call itself fails. */
 export async function refund(store: CounterStore, visitorId: string, ip: string, now = new Date()) {
   const k = keys(visitorId, ip, utcDayKey(now));

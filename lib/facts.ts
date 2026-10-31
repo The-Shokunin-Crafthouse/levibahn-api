@@ -29,6 +29,14 @@ HOW HE LEADS
 - Works alone, embeds with a team, or assembles specialists for a problem, without agency overhead. "No decks, no big reveals, no ego."
 - His closing question to hiring managers: "What's the hardest design problem your team is sitting on right now?"
 
+HOW HE WORKS (his design process, the same at Sallie Mae, AT&T and in his studio; written by Levi 2026-10-31)
+- Starts with the problem: maps the user journey, with insights and metrics for each touchpoint.
+- Forms a hypothesis on where to focus the work and why. The why is a strategic business imperative or an unmet user need.
+- Agrees scope in writing with cross-functional partners.
+- Names the metric tied to the problem, its current value, and the target it should reach once the solution ships.
+- Tests with users and iterates until new sessions stop surfacing new issues.
+- After launch, measures until the change in the metric is statistically significant, and keeps iterating until the metric reaches its target.
+
 CASE STUDIES ON THE SITE (five)
 1. A national student lender's native app (hidden name until unlocked): "The right answer, before the phone call." Ground-up iOS and Android redesign, 2023 to 2026.
 2. A national student lender's application journey (hidden name until unlocked): "Apply with your eyes open." Marketing through application and servicing, 2023 to 2026.

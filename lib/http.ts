@@ -23,6 +23,11 @@ export function corsHeaders(request: Request): Record<string, string> {
   };
 }
 
+/** True when the request's Origin is on the allowlist. A missing Origin is not. */
+export function originAllowed(request: Request): boolean {
+  return allowedOrigins().includes(request.headers.get('origin') ?? '');
+}
+
 export function preflight(request: Request): Response {
   return new Response(null, { status: 204, headers: corsHeaders(request) });
 }

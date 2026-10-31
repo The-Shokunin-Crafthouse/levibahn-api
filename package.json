@@ -7,6 +7,7 @@
   "engines": { "node": "22.x" },
   "scripts": {
     "test": "tsx --test test/*.test.ts",
+    "eval": "tsx eval/run.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
