@@ -23,7 +23,7 @@ export const CAP_MESSAGE: Record<'visitor' | 'ip' | 'site', string> = {
 };
 
 /** Too fast, or a filled honeypot. A bot sees the same answer as a fast human (spec 60 §10). */
-export const BURST_BODY = { reason: 'burst', message: 'Smartypants needs a moment. Try again in a minute.' } as const;
+export const BURST_BODY = { reason: 'burst', message: 'SmartyPants needs a moment. Try again in a minute.' } as const;
 
 const INTERRUPTED = '\n\n[The answer was interrupted. Ask again.]';
 

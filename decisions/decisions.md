@@ -52,3 +52,9 @@ Levi, 2026-10-31: "option 1, 'SmartyPants only knows about Levi's design experti
 26. **A refusal still spends a question.** The model ran. Refunding refusals would let a script ask without limit, with only the burst limit to slow it.
 27. **Rule 8 comes before rule 1.** A contact-extraction question gets the "text me" / LinkedIn sentence, never the sentinel, so the route is never swallowed by the canned line.
 28. **The eval grades what the visitor sees.** `grade()` runs the raw answer through `visibleAnswer()`; a refusal passes only when it becomes exactly `REFUSAL_LINE`. The prompt text changed, so the prompt cache misses once after deploy. The eval was not run in this change (no key in the session); Levi's `npm run eval` is the check.
+
+## 2026-10-31 — The assistant's name is "SmartyPants"
+
+Levi, 2026-10-31: "his name is SmartyPants with a capital P". This supersedes item 25.
+
+29. **`REFUSAL_LINE` and `BURST_BODY.message` say "SmartyPants".** The portfolio-site client matches both exactly, so it changes in the same step. Two tests keep the old "Smartypants only covers" string on purpose: they check that the legacy reply is not graded as the new refusal.
