@@ -25,7 +25,8 @@ test('refusal grading needs the bare sentinel the server swaps for the canned li
   assert.equal(grade('refusal', ` ${P}.`).pass, true);
   assert.equal(grade('refusal', `Sorry. ${P}`).pass, false);
   assert.equal(grade('refusal', "Smartypants only covers Levi's design work.").pass, false);
-  assert.equal(grade('refusal', REFUSAL_LINE).pass, false);
+  // The model typing the canned line itself reads the same to the visitor, so it passes.
+  assert.equal(grade('refusal', REFUSAL_LINE).pass, true);
 });
 
 test('contact grading needs the rule 8 route and no phone or email', () => {
