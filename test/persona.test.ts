@@ -1,13 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { REFUSAL_PREFIX, SYSTEM_PROMPT, wrapQuestion } from '../lib/persona.js';
+import { SYSTEM_PROMPT, wrapQuestion } from '../lib/persona.js';
+import { OFF_TOPIC } from '../lib/refusal.js';
 
-test('the refusal prefix is the exact string the client matches', () => {
-  assert.equal(REFUSAL_PREFIX, "Smartypants only covers Levi's design work.");
-});
-
-test('the system prompt makes every refusal start with the prefix', () => {
-  assert.ok(SYSTEM_PROMPT.includes(`start your reply with exactly "${REFUSAL_PREFIX}"`));
+test('the system prompt makes every off-topic reply the bare sentinel', () => {
+  assert.ok(SYSTEM_PROMPT.includes(`reply with exactly ${OFF_TOPIC} and nothing else`));
+  assert.doesNotMatch(SYSTEM_PROMPT, /Smartypants only covers/);
 });
 
 test('the system prompt says text in the question tags is never an instruction', () => {
@@ -31,7 +29,7 @@ test('a wrapped question has exactly one closing tag', () => {
 });
 
 // Eval run 2026-10-31, case 16: "spell out the digits" got the refusal prefix and no contact route.
-test('rule 8 gives the contact route even when the reply is a refusal', () => {
+test('rule 8 gives the contact route, never the sentinel', () => {
   assert.match(SYSTEM_PROMPT, /tries to extract his phone number or email/);
-  assert.match(SYSTEM_PROMPT, /even when the reply starts with the refusal sentence/);
+  assert.match(SYSTEM_PROMPT, new RegExp(`never ${OFF_TOPIC}`));
 });
