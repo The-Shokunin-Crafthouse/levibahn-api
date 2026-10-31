@@ -11,6 +11,7 @@ import { clientIp, corsHeaders, json, originAllowed, preflight, visitorId } from
 import { burst, refund, reserve } from '../lib/limits.js';
 import { adapt } from '../lib/node-adapter.js';
 import { chatParams } from '../lib/params.js';
+import { RefusalGate } from '../lib/refusal.js';
 import { getStore, storeIsDurable } from '../lib/store.js';
 
 export const config = { supportsResponseStreaming: true };
@@ -93,14 +94,23 @@ export async function handler(request: Request): Promise<Response> {
   const body = new ReadableStream<Uint8Array>({
     async start(controller) {
       let sent = false;
+      const gate = new RefusalGate();
+      const send = (text: string) => {
+        if (!text) return;
+        controller.enqueue(encoder.encode(text));
+        sent = true;
+      };
       try {
         for await (const event of stream) {
           if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta' && event.delta.text) {
-            controller.enqueue(encoder.encode(event.delta.text));
-            sent = true;
+            send(gate.push(event.delta.text));
+            // Off topic: the canned line is out. Leaving the loop aborts the model call.
+            if (gate.closed) break;
           }
         }
+        send(gate.end());
       } catch {
+        send(gate.end());
         // Reported in-band: the status line has already gone out.
         controller.enqueue(encoder.encode(INTERRUPTED));
       } finally {

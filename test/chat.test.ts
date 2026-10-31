@@ -2,7 +2,7 @@ import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { handler, CAP_MESSAGE, BURST_BODY, __setStreamFactory, type StreamParams } from '../api/chat.js';
 import { keys } from '../lib/limits.js';
-import { REFUSAL_PREFIX } from '../lib/persona.js';
+import { OFF_TOPIC, REFUSAL_LINE } from '../lib/refusal.js';
 import { __setStore, getStore } from '../lib/store.js';
 
 process.env.ANTHROPIC_API_KEY = 'test-key-not-real';
@@ -129,7 +129,7 @@ test('the system prompt is sent unchanged, so the prompt cache still hits', asyn
   const b = await ask({ question: 'two' }, { vid: 'visitor-test0002' });
   await b.text();
   assert.equal(JSON.stringify(lastParams?.system), first);
-  assert.ok(first.includes(REFUSAL_PREFIX));
+  assert.ok(first.includes(OFF_TOPIC));
 });
 
 test('an upstream failure before any byte refunds the question', async () => {
@@ -157,4 +157,29 @@ test('a stream that ends with no text refunds the question', async () => {
   const res = await ask({ question: 'hi' });
   await res.text();
   assert.equal(await visitorCount(), 0);
+});
+
+test('an off-topic sentinel streams the canned line, stops reading the model and stays spent', async () => {
+  let pulled = 0;
+  let closed = false;
+  __setStreamFactory(() => ({
+    [Symbol.asyncIterator]() {
+      const parts = ['OFF', '_TOPIC', ' more', ' tokens'];
+      return {
+        async next() {
+          if (pulled >= parts.length) return { done: true, value: undefined };
+          return { done: false, value: { type: 'content_block_delta', delta: { type: 'text_delta', text: parts[pulled++] } } };
+        },
+        async return() {
+          closed = true;
+          return { done: true, value: undefined };
+        },
+      };
+    },
+  }));
+  const res = await ask({ question: 'Write me a poem about the sea.' });
+  assert.equal(await res.text(), REFUSAL_LINE);
+  assert.equal(pulled, 2);
+  assert.equal(closed, true);
+  assert.equal(await visitorCount(), 1);
 });
