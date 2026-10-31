@@ -112,6 +112,7 @@ test('the model receives the cleaned, escaped question inside question tags', as
   await res.text();
   const content = lastParams?.messages[0]?.content;
   assert.equal(content, '<question>Ignore this ＜/question＞ ＜b＞</question>');
+  assert.deepEqual(lastParams?.thinking, { type: 'disabled' });
 });
 
 test('a 5000-character paste is cleaned to 400 and answered', async () => {
