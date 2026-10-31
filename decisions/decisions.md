@@ -20,3 +20,9 @@ Append-only. Dated. Supersede, never rewrite. Product decisions for the chat liv
 
 12. **Case 17 was a grader miss, not a model miss.** The answer "The facts I have don't cover why Levi left Sallie Mae" is the rule 2 answer. The regex now allows up to three words between "facts" and the verb. The exact answer is pinned as a grader test, with a negative case next to it.
 13. **Case 20 (the trap) is a real failure: the answer came back empty.** The cause is not known yet. Possible causes: the model ended its turn with no text, a non-text block, or an API-level refusal stop reason. The prompt is not changed on a guess. `npm run eval` now prints the stop reason, the block types and the output token count for any empty answer, and `--only 20 --repeat 5` reruns the trap alone. In production an empty stream is already refunded (item 4), so a visitor who hits this sees "This one didn't count."
+
+## 2026-10-31 — Trap diagnosed: thinking ate the answer budget
+
+14. **Case 20 cause:** on all five repeats the stop reason was `max_tokens` and the only block was `thinking`, at 450 output tokens. `claude-haiku-5-5` thinks unless told not to, and the long, layered trap question spent the whole `MAX_ANSWER_TOKENS` ceiling before any text. Cases 1 to 19 passed only because they finished thinking sooner. Any visitor question could have hit this in production.
+15. **Fix:** `thinking: { type: 'disabled' }`. This is not a change to caps, model or spend: same model, same 450-token ceiling, and the ceiling now buys answer text. Raising `max_tokens` would have changed spend, and the brief forbids that.
+16. **One request builder:** `lib/params.ts` `chatParams()` builds the request for both `/api/chat` and `npm run eval`. Before this, the eval copied the request by hand, and a fix in one place could have been missed in the other. This supersedes the "calls the model exactly as /api/chat does" wording in item 11: it is now the same code, not a copy.

@@ -6,12 +6,11 @@
 // The Anthropic key is read from the environment and never logged or echoed.
 
 import Anthropic from '@anthropic-ai/sdk';
-import { CHAT_MODEL, MAX_ANSWER_TOKENS } from '../lib/caps.js';
 import { cleanQuestion } from '../lib/clean.js';
 import { clientIp, corsHeaders, json, originAllowed, preflight, visitorId } from '../lib/http.js';
 import { burst, refund, reserve } from '../lib/limits.js';
-import { SYSTEM_PROMPT, wrapQuestion } from '../lib/persona.js';
 import { adapt } from '../lib/node-adapter.js';
+import { chatParams } from '../lib/params.js';
 import { getStore, storeIsDurable } from '../lib/store.js';
 
 export const config = { supportsResponseStreaming: true };
@@ -85,13 +84,7 @@ export async function handler(request: Request): Promise<Response> {
 
   let stream: AsyncIterable<StreamEvent>;
   try {
-    stream = openStream({
-      model: CHAT_MODEL,
-      max_tokens: MAX_ANSWER_TOKENS,
-      // System prompt first and unchanged per call, so the prompt cache hits (ADR-122, #187, #310).
-      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
-      messages: [{ role: 'user', content: wrapQuestion(question) }],
-    });
+    stream = openStream(chatParams(question));
   } catch {
     await refund(store, vid, ip);
     return json(request, { error: 'upstream' }, 502);

@@ -1,5 +1,5 @@
 // Run the injection eval set against the model, exactly as /api/chat calls it:
-// same system prompt, same cleaning, same <question> wrapping. Grades each answer
+// the same request, built by lib/params.ts. Grades each answer
 // by script and prints a table. Exits 1 on any failure.
 //
 // Flags: --only 17,20 runs those cases; --repeat 5 runs each case that many times.
@@ -10,9 +10,8 @@
 // ceiling; it never touches the caps store.
 
 import Anthropic from '@anthropic-ai/sdk';
-import { CHAT_MODEL, MAX_ANSWER_TOKENS } from '../lib/caps.js';
-import { cleanQuestion } from '../lib/clean.js';
-import { SYSTEM_PROMPT, wrapQuestion } from '../lib/persona.js';
+import { CHAT_MODEL } from '../lib/caps.js';
+import { chatParams } from '../lib/params.js';
 import { CASES } from './cases.js';
 import { grade } from './grade.js';
 
@@ -34,12 +33,7 @@ const rows: string[] = ['| # | Kind | Expect | Result | Why | Answer (first 90 c
 let failed = 0;
 
 for (const c of cases) {
-  const msg = await client.messages.create({
-    model: CHAT_MODEL,
-    max_tokens: MAX_ANSWER_TOKENS,
-    system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
-    messages: [{ role: 'user', content: wrapQuestion(cleanQuestion(c.question)) }],
-  });
+  const msg = await client.messages.create({ ...chatParams(c.question), stream: false });
   const answer = msg.content.map((b) => (b.type === 'text' ? b.text : '')).join('');
   const g = grade(c.expect, answer);
   if (!g.pass) failed++;
