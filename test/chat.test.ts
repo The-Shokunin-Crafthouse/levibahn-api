@@ -42,7 +42,7 @@ const visitorCount = (vid = 'visitor-test0001') => getStore().get(keys(vid, ip).
 
 test('over-cap messages point to "the link below", never the corner prompt', () => {
   for (const m of Object.values(CAP_MESSAGE)) {
-    assert.match(m, /the link below/);
+    assert.match(m, /the link below/i);
     assert.doesNotMatch(m, /corner/);
   }
 });

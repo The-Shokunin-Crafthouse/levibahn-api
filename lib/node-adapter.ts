@@ -37,6 +37,9 @@ async function toWebRequest(req: IncomingMessage): Promise<Request> {
 async function sendWebResponse(res: ServerResponse, response: Response): Promise<void> {
   res.statusCode = response.status;
   response.headers.forEach((v, k) => res.setHeader(k, v));
+  // Send the headers now, not with the first byte, so the client can tell
+  // "budget checked" from "model writing" (spec 60 §5).
+  res.flushHeaders();
   if (!response.body) {
     res.end();
     return;
