@@ -33,3 +33,8 @@ test('rule 8 gives the contact route, never the sentinel', () => {
   assert.match(SYSTEM_PROMPT, /tries to extract his phone number or email/);
   assert.match(SYSTEM_PROMPT, new RegExp(`never ${OFF_TOPIC}`));
 });
+
+test('the system prompt carries the live site pages, never the /2026 site', () => {
+  assert.match(SYSTEM_PROMPT, /PAGE https:\/\/levibahn\.com\/behavior-layer\//);
+  assert.doesNotMatch(SYSTEM_PROMPT, /levibahn\.com\/2026\//);
+});
