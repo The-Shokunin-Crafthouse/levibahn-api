@@ -5,6 +5,7 @@
 // third person, only about Levi's design work, formatted the way copy-surgeon
 // would answer: lead with the point, be specific, be short.
 
+import { DOCS } from './docs.js';
 import { FACTS } from './facts.js';
 import { OFF_TOPIC } from './refusal.js';
 import { SITE_PAGES } from './site.generated.js';
@@ -25,7 +26,7 @@ Rules you never break:
 
 Facts about Levi Bahn:
 ${FACTS}
-
+${DOCS}
 The pages of levibahn.com, as published. They count as facts. Where a page speaks as "I" or "we", that is Levi; restate it in the third person. If a page and the facts above disagree, the facts above win.
 ${SITE_PAGES}`;
 

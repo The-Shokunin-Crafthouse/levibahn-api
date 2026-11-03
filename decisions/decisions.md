@@ -72,3 +72,11 @@ Levi, 2026-11-02: "update my ai chat experience so that the facts include anythi
 33. **Gated case studies stay gated.** The crawler sees only the public teaser of the three NDA studies. No hidden product name and no phone number or email is in the output (checked by grep).
 34. **Spend:** the system prompt grows by about 12,000 tokens. The prompt cache covers it after the first call. The prompt text changed, so the cache misses once after deploy. The eval was not run in this change (no key in the session); Levi's `npm run eval` is the check.
 35. **The job-search PDFs are not in yet.** macOS blocked the session from `~/Documents`, so it could not read them.
+
+## 2026-11-02 — The Q&A reads the positioning docs
+
+Levi, 2026-11-02: "Also include the documents above into its knowledge base" (elevator, job-market, job-search, linkedin and narrative-update PDFs, plus the resume PDF).
+
+36. **`lib/docs.ts` carries a curated summary, not the raw text.** This repo is public and the prompt text is in it, so `sources/` (the PDFs) is gitignored. Left out on purpose: recruiter names and phone numbers (third parties), the target-company list, the $250K figure, outreach tactics, and the "Open to Work hidden" negotiation note. A visitor-facing chat must not repeat those. Kept: positioning statements, role lanes and company filters, his own quotes, the AT&T title split, listed skills.
+37. **The resume PDF was not copied in.** `/resume/` on the live site is in `SITE_PAGES`, so its content is already covered.
+38. **The two Sallie Mae numbers are separate results.** Levi, 2026-11-02: "2B for marketing and application journeys, 10M is call center savings for existing customers". `FACTS` now names each with its own cause and tells the model never to merge them. Before this, one line credited both to the same app-and-web redesign.

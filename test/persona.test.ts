@@ -38,3 +38,8 @@ test('the system prompt carries the live site pages, never the /2026 site', () =
   assert.match(SYSTEM_PROMPT, /PAGE https:\/\/levibahn\.com\/behavior-layer\//);
   assert.doesNotMatch(SYSTEM_PROMPT, /levibahn\.com\/2026\//);
 });
+
+test('the system prompt carries the positioning docs, without recruiter contacts', () => {
+  assert.match(SYSTEM_PROMPT, /craft-driven Product Innovation and Digital Transformation leader/);
+  assert.doesNotMatch(SYSTEM_PROMPT, /\(\d{3}\) \d{3}-\d{4}/);
+});
