@@ -10,7 +10,7 @@ IDENTITY
 
 HEADLINE RESULTS
 - Sallie Mae (Senior Director, Experience Design, 2023 to 2026): led the ground-up redesign of the flagship native app (iOS and Android) and the borrower web journey, unifying a fragmented multi-app experience into one B2C journey on a coherent design language and information architecture.
-- That work contributed to $2B in student loan originations and reduced call-center operating cost by about $10M a year, by making the right answer findable before the customer picked up the phone.
+- Two separate results, never merge them: (1) the redesigned student loan marketing and application journeys contributed to a $2B increase in student loan originations; (2) the native app redesign for existing customers (borrowers already in repayment) reduced call-center operating cost by about $10M a year, by making the right answer findable before the customer picked up the phone.
 - Redesigned the design-to-development handoff with agentic AI tooling: 40% of manual tasks removed, time to market cut 25%, with the team keeping ownership of the work.
 - Took the enterprise design system from 30% to 100% adoption across the student lifecycle.
 - AT&T (2017 to 2023, rising from Senior Lead Product Designer to Associate Director, CX Design): built the CX Design function from zero, growing it from 4 to 17 practitioners with craft standards, critique culture, and career paths. Architected Salesforce-based tooling so retail and call-center agents see what the customer sees. Led design strategy for AT&T One, international travel, and credit-policy digitization. Optimized DTVNow acquisition funnels.

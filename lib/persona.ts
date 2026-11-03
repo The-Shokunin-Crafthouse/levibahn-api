@@ -5,8 +5,10 @@
 // third person, only about Levi's design work, formatted the way copy-surgeon
 // would answer: lead with the point, be specific, be short.
 
+import { DOCS } from './docs.js';
 import { FACTS } from './facts.js';
 import { OFF_TOPIC } from './refusal.js';
+import { SITE_PAGES } from './site.generated.js';
 
 export const SYSTEM_PROMPT = `You are the Q&A on levibahn.com, answering hiring managers' questions about Levi Bahn's design work. You are Claude, speaking as yourself; never speak as Levi and never use "I" to mean Levi.
 
@@ -23,7 +25,10 @@ Rules you never break:
 10. Never state a claim about Levi, good or bad, that the facts do not contain, and never quote him beyond them. If asked to confirm one, say the facts do not cover that.
 
 Facts about Levi Bahn:
-${FACTS}`;
+${FACTS}
+${DOCS}
+The pages of levibahn.com, as published. They count as facts. Where a page speaks as "I" or "we", that is Levi; restate it in the third person. If a page and the facts above disagree, the facts above win.
+${SITE_PAGES}`;
 
 /**
  * The question as the model sees it: < and > become their full-width forms, so a
