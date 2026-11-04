@@ -34,7 +34,7 @@ test('a first visitor sees the seed: 31 · 57 · 12', async () => {
 });
 
 test('the seed is the only source of the starting numbers', () => {
-  assert.deepEqual(POLL_SEED, { 6: 31, 13: 57, 21: 12 });
+  assert.deepEqual(POLL_SEED, { 8: 31, 13: 57, 21: 12 });
 });
 
 test('a real vote adds on top of the seed', async () => {
@@ -56,9 +56,9 @@ test('GET returns a returning visitor their stored vote', async () => {
 
 test('a repeat POST returns the stored vote and counts nothing', async () => {
   fresh();
-  await call('POST', 'visitor-dddddddd', 6);
+  await call('POST', 'visitor-dddddddd', 8);
   const again = await call('POST', 'visitor-dddddddd', 21);
-  assert.equal(again.voted, 6);
+  assert.equal(again.voted, 8);
   assert.equal(again.total, 101);
   assert.equal(again.options.find((o) => o.value === 21)?.count, 12);
 });

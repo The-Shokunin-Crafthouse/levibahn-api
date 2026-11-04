@@ -10,11 +10,11 @@ import { json, preflight, visitorId } from '../lib/http.js';
 import { adapt } from '../lib/node-adapter.js';
 import { getStore } from '../lib/store.js';
 
-export const POLL_OPTIONS = [6, 13, 21] as const;
+export const POLL_OPTIONS = [8, 13, 21] as const;
 type Option = (typeof POLL_OPTIONS)[number];
 
 /** Starting counts added to the real ones, so a first visitor sees 31 · 57 · 12. */
-export const POLL_SEED: Readonly<Record<Option, number>> = { 6: 31, 13: 57, 21: 12 };
+export const POLL_SEED: Readonly<Record<Option, number>> = { 8: 31, 13: 57, 21: 12 };
 
 const VOTES = 'poll:principles:votes';
 
