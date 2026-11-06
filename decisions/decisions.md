@@ -80,3 +80,9 @@ Levi, 2026-11-02: "Also include the documents above into its knowledge base" (el
 36. **`lib/docs.ts` carries a curated summary, not the raw text.** This repo is public and the prompt text is in it, so `sources/` (the PDFs) is gitignored. Left out on purpose: recruiter names and phone numbers (third parties), the target-company list, the $250K figure, outreach tactics, and the "Open to Work hidden" negotiation note. A visitor-facing chat must not repeat those. Kept: positioning statements, role lanes and company filters, his own quotes, the AT&T title split, listed skills.
 37. **The resume PDF was not copied in.** `/resume/` on the live site is in `SITE_PAGES`, so its content is already covered.
 38. **The two Sallie Mae numbers are separate results.** Levi, 2026-11-02: "2B for marketing and application journeys, 10M is call center savings for existing customers". `FACTS` now names each with its own cause and tells the model never to merge them. Before this, one line credited both to the same app-and-web redesign.
+
+## 2026-11-06 — Site facts refreshed for the new /agent page
+
+Levi, 2026-11-06: asked whether the chat reads new pages on its own. It does not. `lib/site.generated.ts` is a snapshot, so a page added after the last run (2026-11-02) is unknown to SmartyPants until the crawl is re-run and deployed.
+
+39. **Re-ran `npm run build:site-facts`.** 22 pages, up from 20. New: `/agent/` and `/ai-lab/shokunin-brand/`. Nine existing pages changed because the live site changed since 2026-11-02. Tests and typecheck pass. No gated study name and no phone number appear (grep). The agent page publishes `levi@levibahn.com`, so that address is now in the prompt; rule 8 still tells the model not to give it out. The eval was not run (no key in the session).
