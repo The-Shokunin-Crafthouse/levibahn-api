@@ -31,6 +31,12 @@ npm install && npm test
 
 Tests cover the cap logic with an in-memory store and are run with a planted bug before merge (studio learning #231).
 
+## Site knowledge refresh
+
+SmartyPants answers from `lib/site.generated.ts`, a snapshot of the live levibahn.com. The `refresh-site-facts` workflow rebuilds it every night (09:17 UTC) and can be run by hand from the Actions tab. It crawls the site, runs `scripts/check-site-facts.mjs`, runs the tests, and commits to `main` only if the snapshot changed. Vercel redeploys on that push.
+
+The checks stop the run, with nothing committed, if: fewer than 15 pages were crawled; the text shrank more than 25% or grew more than 30%; a blocked name, a phone number or an unexpected email address appears. Add a name to `BLOCKLIST` in the script to block it. A stopped run emails the repo owner.
+
 ## Studio
 
 Part of The Shokunin Crafthouse. Decisions for this code live in `portfolio-site/decisions/decisions.md` (Gate 1 block, 2026-10-22, and its backend amendment).
