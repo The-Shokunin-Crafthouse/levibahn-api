@@ -1,0 +1,47 @@
+# Nightly refresh of SmartyPants' site knowledge (lib/site.generated.ts).
+# Crawls the live levibahn.com, runs the safety checks, and if anything changed
+# commits straight to main. Vercel redeploys on the push. A failed check stops
+# the run, commits nothing, and GitHub emails the repo owner.
+name: refresh-site-facts
+
+on:
+  schedule:
+    - cron: '17 9 * * *' # 09:17 UTC, about 3am in Colorado
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-site-facts
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Crawl the live site
+        run: npm run build:site-facts
+      - name: Safety checks
+        run: node scripts/check-site-facts.mjs
+      - name: Tests and typecheck
+        run: |
+          npm test
+          npm run typecheck
+      - name: Commit to main if the snapshot changed
+        run: |
+          if git diff --quiet -- lib/site.generated.ts; then
+            echo "No change on the site. Nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/site.generated.ts
+          git commit -m "chore(facts): nightly refresh of the site snapshot"
+          git push origin HEAD:main
