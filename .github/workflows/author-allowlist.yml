@@ -1,0 +1,45 @@
+# author-allowlist.yml (ADR-131)
+# For PUBLIC repos. Fails any pull request whose author is not on the list,
+# so a stranger's PR can never turn green and be merged by accident.
+#
+# Setup (once per repo):
+#   1. Edit the case list below to the logins you trust.
+#   2. Open one PR so this check runs once.
+#   3. Settings -> Rules -> the main ruleset -> Require status checks -> add "author-allowlist".
+#
+# Design notes:
+#   - pull_request_target runs the workflow from the base branch, so a PR cannot
+#     edit this file to pass itself. It never checks out the PR's code.
+#   - The author goes in through env, never pasted into the script text.
+#   - Bot PRs opened with the default GITHUB_TOKEN do not trigger workflows at all,
+#     so a repo that has such a bot must open those PRs with an app token instead,
+#     or the required check will wait forever.
+# PUBLIC repos only (or a funded month). A private repo gates and deploys on the CI Mac
+# instead: scripts/ci/local-gate.sh and local-deploy.sh, ADR-115 amendment, ADR-148.
+name: author-allowlist
+
+on:
+  pull_request_target:  # retired-practice-ok: actions-trigger-template public repos only (ADR-131); private repos use the CI Mac
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  author-allowlist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check the pull request author
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          case "$AUTHOR" in
+            "ShokuAdmin"|"github-actions[bot]")
+              echo "Author $AUTHOR is on the list."
+              ;;
+            *)
+              echo "::error::Pull request author is not on the allowlist. Do not merge unless Levi reviewed it."
+              exit 1
+              ;;
+          esac
